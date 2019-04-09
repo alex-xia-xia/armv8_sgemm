@@ -25,6 +25,23 @@ Test:
 	OpenBLAS: 21 GFLOPS
 	OURS: 25 GFLOPS
 ***
+GotoBLAS Algorithm
+---
+```C++
+Loop5 for jc = 0 to N-1 in steps of NC
+Loop4   for kc = 0 to K-1 in steps of KC
+          //Pack KCxNC block of B
+Loop3     for ic = 0 to M-1 in steps of MC
+            //Pack MCxKC block of A
+//--------------------Macro Kernel------------
+Loop2       for jr = 0 to NC-1 in steps of NR
+Loop1         for ir = 0 to MC-1 in steps of MR
+//--------------------Micro Kernel------------
+Loop0           for k = 0 to KC-1 in steps of 1
+                //update MRxNR block of C matrix
+```
+![image](https://i.stack.imgur.com/1Gmdh.png)
+***
 
 Kernel(12x8):
 ===

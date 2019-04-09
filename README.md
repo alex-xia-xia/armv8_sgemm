@@ -1,21 +1,26 @@
 armv8_sgemm: A single precision GEMM example on armv8 using assembly code.
 
 Introduction:
-This is not a fully GEMM library, just a simple exaple of GEMM. The dimensions only support (M,N,K) times (64*8,64*12,256).
+
+This is not a fully GEMM library, just a simple exaple of GEMM. 
+The dimensions only support (M,N,K) times (64*8,64*12,256).
 The example only supports C=A*B. And we write this project after the study of arm ComputeLibrary gemm kernel(12x8).
 Matrices A,B,C are column-major format. And we donnot use multi-thread.
 
 Pre-requisites:
+
 	A C++ compiler (tested with GCC)
 	OpenBLAS (tested with version 0.2.20)
 
 Test:
+
 	Dimension(M,N,K): (512, 768, 1024)
 	OpenBLAS: 21 GFLOPS
 	OURS: 25 GFLOPS
 
 Kernel(12x8):
 Register Allocation:
+
 	ARMv8 has 32 128bit floating-point registers labeled v0-v31.
 	According to gotoBLAS paper, the inner loop is a (mrxnr) GESS kernel. (mr,nr) is single precision register number.
 	So how to decide register blocking factor (mrxnr), we donot describe the details.
@@ -25,6 +30,7 @@ Register Allocation:
 	The ARM ComputeLibrary use 2 registers to double A_next.
 
 Register Chart:
+
 	A : v0, v1
 	A': v5, v6
 	B : v2, v3, v4
@@ -44,6 +50,7 @@ Register Chart:
         	|    |  |        v15       |        v23       |        v31       |
 
 Loop Unroll: 
+
 	unroll 0:
                                              B
         	        |        v2        |          v3      |        v4        |
@@ -58,7 +65,7 @@ Loop Unroll:
         	| v1 |  | fmla v2, v1.s[2] | fmla v3, v1.s[2] | fmla v4, v1.s[2] |
         	|    |  | fmla v2, v1.s[3] | fmla v3, v1.s[3] | fmla v4, v1.s[3] |
         	
-    unroll 1:    	
+	unroll 1:    	
                                              B
         	        |        v2        |          v3      |        v4        |
 	     
@@ -78,6 +85,7 @@ I only found a unroll factor 4 closed the circle.
 Other solutions have more unrollings, but I didn't find the close circle.
 
 Unroll 4 solution as follows, more details see the images in my project. But we didnot finish this solution:
+
 	A0: v0, v1
 	A1: v5, v6
 	B0: v2, v3, v4
@@ -101,7 +109,7 @@ Unroll 4 solution as follows, more details see the images in my project. But we 
         	| v1 |  | fmla v2, v1.s[2] | fmla v3, v1.s[2] | fmla v4, v1.s[2] |
         	|    |  | fmla v2, v1.s[3] | fmla v3, v1.s[3] | fmla v4, v1.s[3] |
         	
-    unroll 1:    	
+	unroll 1:    	
                                              B1
         	        |        v7        |          v2      |        v3        |
 	     
@@ -130,7 +138,7 @@ Unroll 4 solution as follows, more details see the images in my project. But we 
         	| v1 |  | fmla v4, v1.s[2] | fmla v7, v1.s[2] | fmla v2, v1.s[2] |
         	|    |  | fmla v4, v1.s[3] | fmla v7, v1.s[3] | fmla v2, v1.s[3] |
         	
-    unroll 3:    	
+	unroll 3:    	
                                              B3
         	        |        v3        |          v4      |        v7        |
 	     

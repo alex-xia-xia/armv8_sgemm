@@ -1,4 +1,4 @@
-armv8_sgemm: A single precision GEMM example on armv8 using assembly code.
+ARNv8_SGEMM: A single precision GEMM example on ARMv8 using assembly code.
 ===
 
 Introduction:

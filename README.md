@@ -5,7 +5,7 @@ Introduction:
 ---
 
 This is not a fully GEMM library, just a simple exaple of GEMM. 
-The dimensions only support (M,N,K) times (64*8,64*12,256).
+The dimensions only support (M,N,K) times (64x8,64x12,256).
 The example only supports C=A*B. And we write this project after the study of arm ComputeLibrary gemm kernel(12x8).
 Matrices A,B,C are column-major format. And we donnot use multi-thread.
 

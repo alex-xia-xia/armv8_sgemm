@@ -194,3 +194,4 @@ Reference:
 
 	http://apfel.mathematik.uni-ulm.de/~lehn/FLENS-Trinity/flens/examples/tut01-page08.html
 	http://apfel.mathematik.uni-ulm.de/~lehn/sghpc/gemm/
+	Design and Implementation of a Highly Efficient DGEMM for 64-bit ARMv8 Multi-Core Processors
